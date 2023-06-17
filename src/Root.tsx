@@ -31,12 +31,17 @@ const App = () => {
   }, []);
 
   const handleCard = (id: number) => {
-    fetch(`https://api.tcgdex.net/v2/en/cards/${id}`)
-      .then((response) => response.json())
-      .then((json) => {
-        setSelectedCard(json);
-      })
-      .catch((error) => console.error(error));
+    try {
+      const response = await fetch(`https://api.tcgdex.net/v2/en/cards/${id}`);
+      if (response.ok) {
+        const idCard = await response.json();
+        setSelectedCard(idCard);
+      } else {
+        console.log("Error", response.status);
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
   };
 
   const togglefilterOpen = () => {
@@ -58,7 +63,7 @@ const App = () => {
             <div
               key={card.id}
               onClick={() => {
-                handleCardClick(card.id);
+                handleCard(card.id);
                 togglefilterOpen();
               }}
             >
