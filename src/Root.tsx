@@ -19,7 +19,7 @@ const App = () => {
         const response = await fetch("https://api.tcgdex.net/v2/en/cards/");
         if (response.ok) {
           const pokemon = await response.json();
-          setData(pokemon);
+          setData(pokemon.slice(4, 9));
         } else {
           console.log("Error", response.status);
         }
@@ -28,17 +28,9 @@ const App = () => {
       }
     };
     fetchData();
-    // fetch("https://api.tcgdex.net/v2/en/cards/ ")
-    //   .then((response) => response.json())
-    //   .then((json) => {
-    //     // Plus za slice zanim wrzucisz obiekty do state, trzymanie tak dużego state byloby obciążające
-    //     setData(json);
-    //   })
-    //   .catch((error) => console.error(error));
-    //  Kolejny plus za error handling, szkoda że zabraklo odpowiedniego state w aplikacji
   }, []);
 
-  const handleCardClick = (id: number) => {
+  const handleCard = (id: number) => {
     fetch(`https://api.tcgdex.net/v2/en/cards/${id}`)
       .then((response) => response.json())
       .then((json) => {
