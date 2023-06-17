@@ -8,9 +8,15 @@ interface Pokemon {
   rarity: string;
   hp: number;
 }
+interface CardData {
+  id: number;
+  image: string;
+  name: string;
+}
+
 const App = () => {
-  const [data, setData] = useState<Pokemon[]>([]);
-  const [selectedCard, setSelectedCard] = useState([]);
+  const [data, setData] = useState<CardData[]>([]);
+  const [selectedCard, setSelectedCard] = useState<Pokemon | null>(null);
   const [isBoxTextOpen, setIsBoxTextOpen] = useState(false);
 
   useEffect(() => {
@@ -18,7 +24,7 @@ const App = () => {
       try {
         const response = await fetch("https://api.tcgdex.net/v2/en/cards/");
         if (response.ok) {
-          const pokemon = await response.json();
+          const pokemon: CardData[] = await response.json();
           setData(pokemon.slice(4, 9));
         } else {
           console.log("Error", response.status);
@@ -30,11 +36,12 @@ const App = () => {
     fetchData();
   }, []);
 
-  const handleCard = (id: number) => {
+  const handleCard = async (id: number): Promise<void> => {
     try {
       const response = await fetch(`https://api.tcgdex.net/v2/en/cards/${id}`);
       if (response.ok) {
-        const idCard = await response.json();
+        const idCard: Pokemon = await response.json();
+        // const { name, id, rarity, hp } = idCard;
         setSelectedCard(idCard);
       } else {
         console.log("Error", response.status);
@@ -50,7 +57,9 @@ const App = () => {
     // a naszym zadaniem jest uproszczenie życia użytkownika :)
     setIsBoxTextOpen(!isBoxTextOpen);
   };
-  const { name, id, rarity, hp } = selectedCard;
+
+  const { name, id, rarity, hp } = selectedCard || {};
+
   return (
     <div>
       <h1>Card list:</h1>
@@ -70,7 +79,7 @@ const App = () => {
               <img src={`${card.image}/low.png`} alt={card.name} />
               {/* //  Tutaj wystarczyłoby sprawdać czy w state: selectedCard, znajduje się jakiś obiekt */}
               {selectedCard && id === card.id && (
-                <div isBoxTextOpen={isBoxTextOpen}>
+                <div data-isBoxTextOpen={isBoxTextOpen}>
                   <h3>Details:</h3>
                   <p>
                     Name: <b>{name}</b>
