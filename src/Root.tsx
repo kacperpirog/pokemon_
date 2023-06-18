@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-interface Pokemon {
-  name: string;
-  id: number;
-  rarity: string;
-  hp: number;
-}
-interface CardData {
-  id: number;
-  image: string;
-  name: string;
-}
+import { CardData, Pokemon } from "./types/types";
 
 const App = () => {
   const [data, setData] = useState<CardData[]>([]);
