@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-// Fajnie by było zobaczyć jak podzieliłbyś aplikacje na componenty, była na to przestrzeń a to by dało większy wgląd w Twoje umiejętnośći
-// Wrzucenie wszystkiego w jednym pliku jest dość nieczytelne nawet jak na tak małą aplikacje.
 interface Pokemon {
   name: string;
   id: number;
