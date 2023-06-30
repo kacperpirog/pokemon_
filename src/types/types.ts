@@ -1,13 +1,11 @@
-export interface Task {
+export interface Pokemon {
   name: string;
-  done: boolean;
-  category?: Category;
+  id: number;
+  rarity: string;
+  hp: number;
 }
-
-export enum Category {
-  GENERAL = "general",
-  WORK = "work",
-  GYM = "gym",
-  HOBBY = "hobby",
-  JS = "JS",
+export interface CardData {
+  id: number;
+  image: string;
+  name: string;
 }

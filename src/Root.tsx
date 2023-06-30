@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { CardData, Pokemon } from "./types/types";
 
-const App = () => {
+const Root = () => {
   const [data, setData] = useState<CardData[]>([]);
   const [selectedCard, setSelectedCard] = useState<Pokemon | null>(null);
   const [isBoxTextOpen, setIsBoxTextOpen] = useState(false);
+  const [cards, setCards] = React.useState([]);
+  const [playerAttack, setPlayerAttack] = React.useState(0);
+  const [playerHp, setPlayerHp] = React.useState(0);
+  const [computerAttack, setComputerAttack] = React.useState(0);
+  const [computerHp, setComputerHp] = React.useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -12,7 +17,17 @@ const App = () => {
         const response = await fetch("https://api.tcgdex.net/v2/en/cards/");
         if (response.ok) {
           const pokemon: CardData[] = await response.json();
-          setData(pokemon.slice(4, 9));
+          setCards(pokemon);
+          for (let i = 0; i < 5; i++) {
+            const card = cards[i];
+            if (card.type === "player") {
+              setPlayerAttack(playerAttack + card.attack);
+              setPlayerHp(playerHp + card.hp);
+            } else {
+              setComputerAttack(computerAttack + card.attack);
+              setComputerHp(computerHp + card.hp);
+            }
+          }
         } else {
           console.log("Error", response.status);
         }
@@ -28,6 +43,7 @@ const App = () => {
       const response = await fetch(`https://api.tcgdex.net/v2/en/cards/${id}`);
       if (response.ok) {
         const idCard: Pokemon = await response.json();
+
         // const { name, id, rarity, hp } = idCard;
         setSelectedCard(idCard);
       } else {
@@ -46,45 +62,34 @@ const App = () => {
   };
 
   const { name, id, rarity, hp } = selectedCard || {};
+  const winner = () => {
+    if (playerAttack > computerAttack) {
+      return "player";
+    } else if (playerAttack < computerAttack) {
+      return "computer";
+    } else {
+      if (playerHp > computerHp) {
+        return "player";
+      } else {
+        return "computer";
+      }
+    }
+  };
 
   return (
     <div>
-      <h1>Card list:</h1>
-
-      <p>Print some pokemon cards here ;)</p>
-
       <div>
-        <div>
-          {data.map((card) => (
-            <div
-              key={card.id}
-              onClick={() => {
-                handleCard(card.id);
-                togglefilterOpen();
-              }}
-            >
-              <img src={`${card.image}/low.png`} alt={card.name} />
-              {/* //  Tutaj wystarczyłoby sprawdać czy w state: selectedCard, znajduje się jakiś obiekt */}
-              {selectedCard && id === card.id && (
-                <div data-isBoxTextOpen={isBoxTextOpen}>
-                  <h3>Details:</h3>
-                  <p>
-                    Name: <b>{name}</b>
-                  </p>
-                  <p>
-                    Rarity:<b> {rarity}</b>
-                  </p>
-                  <p>
-                    HP: <b>{hp}</b>
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
+        <div className="game">
+          <h1>Card Game</h1>
+          <p>Your attack: {playerAttack}</p>
+          <p>Your hp: {playerHp}</p>
+          <p>Computer attack: {computerAttack}</p>
+          <p>Computer hp: {computerHp}</p>
+          <p>Winner: {winner()}</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default App;
+export default Root;
