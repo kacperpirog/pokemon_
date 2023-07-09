@@ -55,9 +55,6 @@ const Root = () => {
   };
 
   const togglefilterOpen = () => {
-    // Niepotrzebnie operujesz na dwóch state żeby wyświetlać box
-    // Dodatkowo ten toggle wymusza na użytkowniku odkliknięcie zaznaczonego pokemona żeby sprawdzić następnego
-    // a naszym zadaniem jest uproszczenie życia użytkownika :)
     setIsBoxTextOpen(!isBoxTextOpen);
   };
 
@@ -71,7 +68,7 @@ const Root = () => {
       if (playerHp > computerHp) {
         return "player";
       } else {
-        return "computer";
+        return "computere";
       }
     }
   };
