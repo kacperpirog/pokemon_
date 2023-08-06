@@ -5,7 +5,10 @@ export interface Pokemon {
   hp: number;
 }
 export interface CardData {
-  id: number;
+  id: string;
   image: string;
   name: string;
+  attacks: number;
+  hp: string;
+  rarity: string;
 }
