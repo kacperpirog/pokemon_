@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { CardData } from "./types/types";
+import { CardData, Pokemon } from "./types/types";
 
 const Root = () => {
   const [cards, setCards] = useState<CardData[]>([]);
+  const [selectedCard, setSelectedCard] = useState<Pokemon[]>([]);
   const [randomCards, setRandomCards] = useState<CardData[]>([]);
   const [computerCards, setComputerCards] = useState<CardData[]>([]);
 
@@ -30,8 +31,22 @@ const Root = () => {
       console.log("Error", error);
     }
   };
+  const handleCard = async (id: string): Promise<void> => {
+    try {
+      const response = await fetch(`https://api.tcgdex.net/v2/en/cards/${id}`);
+      if (response.ok) {
+        const idCard: Pokemon[] = await response.json();
 
-  // const { name, id, rarity, hp } = cards;
+        // const { name, id, rarity, hp } = idCard;
+        setSelectedCard(idCard);
+      } else {
+        console.log("Error", response.status);
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
