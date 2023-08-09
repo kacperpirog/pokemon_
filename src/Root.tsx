@@ -24,6 +24,7 @@ const Root = () => {
         setCards(pokemon);
         setRandomCards(getRandomCards(pokemon, 5));
         setComputerCards(getRandomCards(pokemon, 5));
+        console.log(pokemon, 5);
       } else {
         console.log("Error", response.status);
       }
@@ -62,6 +63,7 @@ const Root = () => {
           </li>
         ))}
       </ul>
+      <h1>Computer card</h1>
       <ul>
         {computerCards.map((card) => (
           <li key={card.id}>
